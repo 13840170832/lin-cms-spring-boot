@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="io.github.talelin.latticy.mapper.SpuMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="io.github.talelin.latticy.model.SpuDO">
+        <id column="id" property="id" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+        <result column="delete_time" property="deleteTime" />
+        <result column="title" property="title" />
+        <result column="subtitle" property="subtitle" />
+        <result column="category_id" property="categoryId" />
+        <result column="root_category_id" property="rootCategoryId" />
+        <result column="online" property="online" />
+        <result column="price" property="price" />
+        <result column="sketch_spec_id" property="sketchSpecId" />
+        <result column="default_sku_id" property="defaultSkuId" />
+        <result column="img" property="img" />
+        <result column="discount_price" property="discountPrice" />
+        <result column="description" property="description" />
+        <result column="tags" property="tags" />
+        <result column="is_test" property="isTest" />
+        <result column="spu_theme_img" property="spuThemeImg" />
+        <result column="for_theme_img" property="forThemeImg" />
+    </resultMap>
+
+    <select id="getDetail" resultType="io.github.talelin.latticy.model.SpuDetailDO">
+        SELECT spu.*,sku.title AS default_sku_title,
+            c.name AS category_name,
+            sk.name AS sketch_spec_key_name
+        FROM spu
+        LEFT JOIN sku ON sku.id = spu.default_sku_id
+        LEFT JOIN category c ON c.id = spu.category_id
+        LEFT JOIN spec_key sk on sk.id = spu.sketch_spec_id
+        WHERE spu.id = #{id} AND spu.delete_time IS NULL
+    </select>
+</mapper>
