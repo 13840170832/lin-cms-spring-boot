@@ -1,6 +1,7 @@
 package io.github.talelin.latticy.service;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import io.github.talelin.latticy.dto.SpuDTO;
 import io.github.talelin.latticy.mapper.SpuMapper;
 import io.github.talelin.latticy.model.SpuDO;
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -20,5 +21,9 @@ public class SpuService extends ServiceImpl<SpuMapper,SpuDO> {
 
     public SpuDetailDO  getDetail(Long id){
         return this.getBaseMapper().getDetail(id);
+    }
+
+    public void create(SpuDTO dto){
+
     }
 }

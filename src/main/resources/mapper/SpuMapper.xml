@@ -25,14 +25,32 @@
         <result column="for_theme_img" property="forThemeImg" />
     </resultMap>
 
-    <select id="getDetail" resultType="io.github.talelin.latticy.model.SpuDetailDO">
+    <resultMap autoMapping="true" id="DetailResultMap" type="io.github.talelin.latticy.model.SpuDetailDO">
+        <id column="id" property="id" />
+        <collection property="spuImgList" ofType="java.lang.String">
+            <constructor>
+                <arg column="spu_img"/>
+            </constructor>
+        </collection>
+        <collection property="spuDetailImgList" ofType="java.lang.String">
+            <constructor>
+                <arg column="spu_detail_img"/>
+            </constructor>
+        </collection>
+    </resultMap>
+
+    <select id="getDetail" resultMap="DetailResultMap">
         SELECT spu.*,sku.title AS default_sku_title,
             c.name AS category_name,
-            sk.name AS sketch_spec_key_name
+            sk.name AS sketch_spec_key_name,
+            si.img AS spu_img,
+            sdi.img AS spu_detail_img
         FROM spu
         LEFT JOIN sku ON sku.id = spu.default_sku_id
         LEFT JOIN category c ON c.id = spu.category_id
         LEFT JOIN spec_key sk on sk.id = spu.sketch_spec_id
+        LEFT JOIN spu_img si ON si.spu_id = spu.id
+        LEFT JOIN spu_detail_img sdi on sdi.spu_id = spu.id
         WHERE spu.id = #{id} AND spu.delete_time IS NULL
     </select>
 </mapper>
