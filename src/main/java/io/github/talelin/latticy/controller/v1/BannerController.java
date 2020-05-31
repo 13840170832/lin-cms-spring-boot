@@ -14,6 +14,8 @@ import io.github.talelin.latticy.vo.CreatedVO;
 import io.github.talelin.latticy.vo.DeletedVO;
 import io.github.talelin.latticy.vo.PageResponseVO;
 import io.github.talelin.latticy.vo.UpdatedVO;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -27,6 +29,7 @@ import javax.validation.constraints.Positive;
 @RequestMapping("/v1/banner")
 @Validated
 @PermissionModule(value = "Banner")
+@Api(tags = "Banner管理")
 public class BannerController {
 
     @Autowired
@@ -35,6 +38,7 @@ public class BannerController {
     @PostMapping
     @PermissionMeta(value = "创建Banner")
     @GroupRequired
+    @ApiOperation(value="添加Banner",notes = "添加Banner")
     public CreatedVO createBanner(@RequestBody @Validated BannerDTO dto){
         BannerDO bannerDO = new BannerDO();
         BeanUtils.copyProperties(dto,bannerDO);
@@ -45,6 +49,7 @@ public class BannerController {
     @PutMapping("{id}")
     @PermissionMeta(value = "更新Banner")
     @GroupRequired
+    @ApiOperation(value="更新Banner",notes = "查看Banner,修改")
     public UpdatedVO update(@RequestBody @Validated BannerDTO bannerDTO,
                     @PathVariable @Positive Long id){
         bannerService.update(bannerDTO,id);
@@ -54,6 +59,7 @@ public class BannerController {
     @DeleteMapping("{id}")
     @PermissionMeta(value = "删除Banner")
     @GroupRequired
+    @ApiOperation(value="删除Banner",notes = "Banner列表-删除")
     public DeletedVO delete(@PathVariable @Positive Long id){
         bannerService.delete(id);
         return new DeletedVO();
@@ -61,12 +67,14 @@ public class BannerController {
 
     @GetMapping("{id}")
     @LoginRequired
+    @ApiOperation(value="Banner详情",notes = "查看Banner")
     public BannerWithItemsBO get(@PathVariable @Positive Long id){
         return bannerService.getBannerWithItems(id);
     }
 
     @GetMapping("/page")
     @LoginRequired
+    @ApiOperation(value="Banner列表",notes = "Banner列表")
     public PageResponseVO<BannerDO> getBanners(@RequestParam(required = false,defaultValue = "0")
                            @Min(value=0) Integer page,
                                                @RequestParam(required = false,defaultValue = "10")

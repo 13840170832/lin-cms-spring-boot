@@ -14,20 +14,13 @@ import java.sql.Timestamp;
 @Getter
 @Setter
 @TableName("banner_item")
-public class BannerItemDO {
+public class BannerItemDO extends BaseModel{
     @TableId(value="id", type= IdType.AUTO)
     private Long id;
     private String img;
     private String keyword;
-    private short type;
-    @JsonIgnore
-    private Timestamp createTime;
-    @JsonIgnore
-    private Timestamp updateTime;
-    @TableLogic
-    @JsonIgnore
-    private Timestamp deleteTime;
-    private int bannerId;
+    private Integer type;
+    private Integer bannerId;
     private String name;
 
 }
