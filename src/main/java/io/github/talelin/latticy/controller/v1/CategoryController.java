@@ -1,13 +1,16 @@
 package io.github.talelin.latticy.controller.v1;
 
 
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import io.github.talelin.latticy.common.mybatis.Page;
+import io.github.talelin.latticy.dto.CategoryDTO;
+import io.github.talelin.latticy.service.CategoryService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 import io.github.talelin.latticy.model.CategoryDO;
 import io.github.talelin.latticy.vo.CreatedVO;
 import io.github.talelin.latticy.vo.DeletedVO;
@@ -18,37 +21,50 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Positive;
 
-import org.springframework.web.bind.annotation.RestController;
-
 /**
 * @author generator@TaleLin
 * @since 2020-05-29
 */
 @RestController
 @RequestMapping("/v1/category")
+@Api(tags = "分类管理")
 public class CategoryController {
 
+    @Autowired
+    private CategoryService categoryService;
+
     @PostMapping("")
-    public CreatedVO create() {
+    @ApiOperation(value="创建分类")
+    public CreatedVO create(@RequestBody @Validated CategoryDTO dto) {
+        CategoryDO categoryDO = new CategoryDO();
+        BeanUtils.copyProperties(dto,categoryDO);
+        this.categoryService.save(categoryDO);
         return new CreatedVO();
     }
 
     @PutMapping("/{id}")
-    public UpdatedVO update(@PathVariable @Positive(message = "{id.positive}") Long id) {
+    @ApiOperation(value="更新分类")
+    public UpdatedVO update(@RequestBody @Validated CategoryDTO dto,
+                            @PathVariable @Positive Long id) {
+        this.categoryService.updateCategory(dto,id);
         return new UpdatedVO();
     }
 
     @DeleteMapping("/{id}")
-    public DeletedVO delete(@PathVariable @Positive(message = "{id.positive}") Long id) {
+    @ApiOperation(value="删除分类")
+    public DeletedVO delete(@PathVariable @Positive Long id) {
+        this.categoryService.deleteCategory(id);
         return new DeletedVO();
     }
 
     @GetMapping("/{id}")
-    public CategoryDO get(@PathVariable(value = "id") @Positive(message = "{id.positive}") Long id) {
-        return null;
+    @ApiOperation(value="查询分类详情")
+    public CategoryDO get(@PathVariable @Positive Long id) {
+        return this.categoryService.getCategoryById(id);
     }
 
     @GetMapping("/page")
+    @ApiOperation(value="查询分类列表")
     public PageResponseVO<CategoryDO> page(
             @RequestParam(name = "count", required = false, defaultValue = "10")
             @Min(value = 1, message = "{page.count.min}")
@@ -56,7 +72,9 @@ public class CategoryController {
             @RequestParam(name = "page", required = false, defaultValue = "0")
             @Min(value = 0, message = "{page.number.min}") Long page
     ) {
-        return null;
+        Page<CategoryDO> pager = new Page<>(page,count);
+        IPage<CategoryDO> paging = this.categoryService.getBaseMapper().selectPage(pager,null);
+        return new PageResponseVO<>(paging.getTotal(),paging.getRecords(),paging.getCurrent(),paging.getSize());
     }
 
 }
