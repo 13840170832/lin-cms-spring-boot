@@ -13,9 +13,11 @@ public class SpuDTO {
     @Length(min=1,max=128)
     private String title;
 
+    @NotBlank
     @Length(min=1,max=255)
     private String subtitle;
 
+    @NotBlank
     @Length(min=1,max=255)
     private String img;
 
