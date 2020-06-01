@@ -1,7 +1,10 @@
 package io.github.talelin.latticy.controller.v1;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import io.github.talelin.autoconfigure.exception.NotFoundException;
+import io.github.talelin.autoconfigure.exception.ParameterException;
 import io.github.talelin.latticy.common.mybatis.Page;
 import io.github.talelin.latticy.dto.CategoryDTO;
 import io.github.talelin.latticy.service.CategoryService;
@@ -28,6 +31,7 @@ import javax.validation.constraints.Positive;
 @RestController
 @RequestMapping("/v1/category")
 @Api(tags = "分类管理")
+@Validated
 public class CategoryController {
 
     @Autowired
@@ -70,10 +74,22 @@ public class CategoryController {
             @Min(value = 1, message = "{page.count.min}")
             @Max(value = 30, message = "{page.count.max}") Long count,
             @RequestParam(name = "page", required = false, defaultValue = "0")
-            @Min(value = 0, message = "{page.number.min}") Long page
+            @Min(value = 0, message = "{page.number.min}") Long page,
+            @RequestParam Integer isRoot,
+            @RequestParam(required = false) Integer parentId
     ) {
+        QueryWrapper<CategoryDO> wrapper = new QueryWrapper<>();
+        wrapper.lambda().eq(CategoryDO::getIsRoot,isRoot)
+                .orderByAsc(CategoryDO::getIndex);
+        if(0 == isRoot){
+            if(null == parentId){
+                throw new ParameterException(40001);
+            }else{
+                wrapper.lambda().eq(CategoryDO::getParentId,parentId);
+            }
+        }
         Page<CategoryDO> pager = new Page<>(page,count);
-        IPage<CategoryDO> paging = this.categoryService.getBaseMapper().selectPage(pager,null);
+        IPage<CategoryDO> paging = this.categoryService.getBaseMapper().selectPage(pager,wrapper);
         return new PageResponseVO<>(paging.getTotal(),paging.getRecords(),paging.getCurrent(),paging.getSize());
     }
 
