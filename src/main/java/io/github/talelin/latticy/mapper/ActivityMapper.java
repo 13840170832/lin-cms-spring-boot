@@ -2,6 +2,7 @@ package io.github.talelin.latticy.mapper;
 
 import io.github.talelin.latticy.model.ActivityDO;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import io.github.talelin.latticy.model.ActivityDetailDO;
 
 /**
  * <p>
@@ -13,4 +14,5 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface ActivityMapper extends BaseMapper<ActivityDO> {
 
+    ActivityDetailDO getDetail(Long id);
 }

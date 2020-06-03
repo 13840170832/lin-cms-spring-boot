@@ -1,7 +1,7 @@
 package io.github.talelin.latticy.controller.v1;
 
 
-import io.github.talelin.latticy.service.ThemeSpuService;
+import io.github.talelin.latticy.service.CouponTemplateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
-import io.github.talelin.latticy.model.ThemeSpuDO;
+import io.github.talelin.latticy.model.CouponTemplateDO;
 import io.github.talelin.latticy.vo.CreatedVO;
 import io.github.talelin.latticy.vo.DeletedVO;
 import io.github.talelin.latticy.vo.PageResponseVO;
@@ -22,21 +22,21 @@ import javax.validation.constraints.Positive;
 
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 /**
 * @author generator@TaleLin
-* @since 2020-06-01
+* @since 2020-06-02
 */
 @RestController
-@RequestMapping("/v1/theme-spu")
-public class ThemeSpuController {
+@RequestMapping("/v1/coupon-template")
+public class CouponTemplateController {
 
     @Autowired
-    private ThemeSpuService themeSpuService;
+    private CouponTemplateService couponTemplateService;
 
-    @PostMapping
-    public CreatedVO create(@RequestParam @Positive Integer themeId,
-                            @RequestParam @Positive Integer spuId) {
-        themeSpuService.createThemeSpu(themeId,spuId);
+    @PostMapping("")
+    public CreatedVO create() {
         return new CreatedVO();
     }
 
@@ -51,12 +51,17 @@ public class ThemeSpuController {
     }
 
     @GetMapping("/{id}")
-    public ThemeSpuDO get(@PathVariable(value = "id") @Positive(message = "{id.positive}") Long id) {
+    public CouponTemplateDO get(@PathVariable(value = "id") @Positive(message = "{id.positive}") Long id) {
         return null;
     }
 
+    @GetMapping("/getAll")
+    public List<CouponTemplateDO> getAll(){
+        return couponTemplateService.getBaseMapper().selectList(null);
+    }
+
     @GetMapping("/page")
-    public PageResponseVO<ThemeSpuDO> page(
+    public PageResponseVO<CouponTemplateDO> page(
             @RequestParam(name = "count", required = false, defaultValue = "10")
             @Min(value = 1, message = "{page.count.min}")
             @Max(value = 30, message = "{page.count.max}") Long count,

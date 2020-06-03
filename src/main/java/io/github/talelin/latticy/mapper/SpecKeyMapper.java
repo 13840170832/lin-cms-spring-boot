@@ -2,7 +2,7 @@ package io.github.talelin.latticy.mapper;
 
 import io.github.talelin.latticy.model.SpecKeyDO;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import org.springframework.stereotype.Repository;
+import io.github.talelin.latticy.model.SpecKeyDetailDO;
 
 import java.util.List;
 
@@ -17,4 +17,6 @@ import java.util.List;
 public interface SpecKeyMapper extends BaseMapper<SpecKeyDO> {
 
     List<SpecKeyDO> getBySpuId(Long spuId);
+
+    SpecKeyDetailDO getDetail(Long id);
 }

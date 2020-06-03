@@ -53,4 +53,10 @@
         LEFT JOIN spu_detail_img sdi on sdi.spu_id = spu.id
         WHERE spu.id = #{id} AND spu.delete_time IS NULL
     </select>
+
+    <select id="getListForTheme" resultMap="BaseResultMap">
+        SELECT s.*
+        FROM spu s
+        WHERE s.id NOT IN (SELECT ts.spu_id FROM theme_spu ts WHERE ts.theme_id = #{themeId});
+    </select>
 </mapper>

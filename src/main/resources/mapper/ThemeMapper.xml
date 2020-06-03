@@ -26,13 +26,6 @@
             <result column="spu_img" property="img"/>
             <result column="spu_title" property="title"/>
             <result column="spu_subtitle" property="subtitle"/>
-
-<!--            <constructor>-->
-<!--                <arg column="spu_id" name=""/>-->
-<!--                <arg column="spu_img"/>-->
-<!--                <arg column="spu_title"/>-->
-<!--                <arg column="spu_subtitle"/>-->
-<!--            </constructor>-->
         </collection>
     </resultMap>
 

@@ -21,4 +21,13 @@
         <result column="root_category_id" property="rootCategoryId" />
     </resultMap>
 
+    <resultMap id="DetailResultMap" autoMapping="true" type="io.github.talelin.latticy.model.SkuDetailDO">
+        <id column="id" property="id" />
+    </resultMap>
+
+    <select id="getDetail" resultMap="DetailResultMap">
+        SELECT sku.*,spu.title AS spu_title
+        FROM sku LEFT JOIN spu ON spu.id=sku.spu_id
+        WHERE sku.id = #{id}
+    </select>
 </mapper>

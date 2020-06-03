@@ -1,13 +1,12 @@
 package io.github.talelin.latticy.controller.v1;
 
 
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
+import io.github.talelin.latticy.dto.SpecValueDTO;
+import io.github.talelin.latticy.service.SpecValueService;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 import io.github.talelin.latticy.model.SpecValueDO;
 import io.github.talelin.latticy.vo.CreatedVO;
 import io.github.talelin.latticy.vo.DeletedVO;
@@ -17,8 +16,7 @@ import io.github.talelin.latticy.vo.UpdatedVO;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Positive;
-
-import org.springframework.web.bind.annotation.RestController;
+import java.util.List;
 
 /**
 * @author generator@TaleLin
@@ -28,35 +26,40 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/v1/spec-value")
 public class SpecValueController {
 
-    @PostMapping("")
-    public CreatedVO create() {
+    @Autowired
+    private SpecValueService specValueService;
+
+    @PostMapping
+    public CreatedVO create(@RequestBody @Validated SpecValueDTO dto) {
+        SpecValueDO value = new SpecValueDO();
+        BeanUtils.copyProperties(dto,value);
+        specValueService.save(value);
         return new CreatedVO();
     }
 
     @PutMapping("/{id}")
-    public UpdatedVO update(@PathVariable @Positive(message = "{id.positive}") Long id) {
+    public UpdatedVO update(@RequestBody @Validated SpecValueDTO dto,
+                            @PathVariable @Positive Long id) {
+        specValueService.updateSpecValue(dto,id);
         return new UpdatedVO();
     }
 
     @DeleteMapping("/{id}")
-    public DeletedVO delete(@PathVariable @Positive(message = "{id.positive}") Long id) {
+    public DeletedVO delete(@PathVariable @Positive Long id) {
+        specValueService.deleteSpecValue(id);
         return new DeletedVO();
     }
 
     @GetMapping("/{id}")
-    public SpecValueDO get(@PathVariable(value = "id") @Positive(message = "{id.positive}") Long id) {
-        return null;
+    public SpecValueDO get(@PathVariable @Positive Long id) {
+        SpecValueDO value = specValueService.getSpecValue(id);
+        return value;
     }
 
-    @GetMapping("/page")
-    public PageResponseVO<SpecValueDO> page(
-            @RequestParam(name = "count", required = false, defaultValue = "10")
-            @Min(value = 1, message = "{page.count.min}")
-            @Max(value = 30, message = "{page.count.max}") Long count,
-            @RequestParam(name = "page", required = false, defaultValue = "0")
-            @Min(value = 0, message = "{page.number.min}") Long page
-    ) {
-        return null;
+    @GetMapping("/by/key/{id}")
+    public List<SpecValueDO> getValueByKey(@PathVariable @Positive Long id){
+        return specValueService.lambdaQuery()
+                .eq(SpecValueDO::getSpecId,id).list();
     }
 
 }

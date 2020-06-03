@@ -19,4 +19,25 @@
         <result column="name" property="name" />
     </resultMap>
 
+    <resultMap id="DetailResultMap" autoMapping="true" type="io.github.talelin.latticy.model.ActivityDetailDO">
+        <id column="id" property="id" />
+        <collection property="couponList" ofType="io.github.talelin.latticy.model.CouponDO">
+            <id column="c_id" property="id" />
+            <result column="c_title" property="title"></result>
+<!--            <result column="full_money" property="fullMoney"></result>-->
+            <result column="c_type" property="type"></result>
+            <result column="c_start_time" property="startTime"></result>
+            <result column="c_end_time" property="endTime"></result>
+            <result column="c_description" property="description"></result>
+        </collection>
+    </resultMap>
+
+    <select id="getDetail" resultMap="DetailResultMap">
+        SELECT a.*,c.id c_id,c.title c_title,c.full_money,c.minus,c.rate,c.type c_type,c.start_time c_start_time,c.end_time c_end_time,c.description c_description
+        FROM activity a
+        LEFT JOIN activity_coupon ac ON ac.activity_id=a.id
+		LEFT JOIN coupon c on ac.coupon_id=c.id
+        WHERE a.id = #{id}
+    </select>
+
 </mapper>

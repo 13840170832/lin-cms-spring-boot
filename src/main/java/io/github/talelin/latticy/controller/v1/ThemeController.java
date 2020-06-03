@@ -6,6 +6,8 @@ import io.github.talelin.latticy.common.mybatis.Page;
 import io.github.talelin.latticy.dto.ThemeDTO;
 import io.github.talelin.latticy.model.ThemeDetailDO;
 import io.github.talelin.latticy.service.ThemeService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -26,12 +28,14 @@ import javax.validation.constraints.Positive;
 */
 @RestController
 @RequestMapping("/v1/theme")
+@Api(tags = "主题管理")
 public class ThemeController {
 
     @Autowired
     private ThemeService themeService;
 
     @PostMapping
+    @ApiOperation(value="创建主题")
     public CreatedVO create(@RequestBody @Validated ThemeDTO dto) {
         ThemeDO theme = new ThemeDO();
         BeanUtils.copyProperties(dto,theme);
@@ -40,6 +44,7 @@ public class ThemeController {
     }
 
     @PutMapping("/{id}")
+    @ApiOperation(value="更新主题")
     public UpdatedVO update(@RequestBody @Validated ThemeDTO dto,
                         @PathVariable @Positive Long id) {
         themeService.updateTheme(dto,id);
@@ -47,6 +52,7 @@ public class ThemeController {
     }
 
     @DeleteMapping("/{id}")
+    @ApiOperation(value="删除主题")
     public DeletedVO delete(@PathVariable @Positive Long id) {
         themeService.deleteTheme(id);
         return new DeletedVO();
@@ -58,11 +64,13 @@ public class ThemeController {
     }
 
     @GetMapping("/{id}/detail")
+    @ApiOperation(value="查询主题详情")
     public ThemeDetailDO getDetail(@PathVariable @Positive Long id) {
         return themeService.getThemeDetailById(id);
     }
 
     @GetMapping("/page")
+    @ApiOperation(value = "查询主题列表")
     public PageResponseVO<ThemeDO> page(
             @RequestParam(name = "count", required = false, defaultValue = "10")
             @Min(value = 1, message = "{page.count.min}")

@@ -1,8 +1,6 @@
 package io.github.talelin.latticy.controller.v1;
 
 
-import io.github.talelin.latticy.service.ThemeSpuService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -10,7 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
-import io.github.talelin.latticy.model.ThemeSpuDO;
+import io.github.talelin.latticy.model.CouponDO;
 import io.github.talelin.latticy.vo.CreatedVO;
 import io.github.talelin.latticy.vo.DeletedVO;
 import io.github.talelin.latticy.vo.PageResponseVO;
@@ -24,19 +22,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
 * @author generator@TaleLin
-* @since 2020-06-01
+* @since 2020-06-02
 */
 @RestController
-@RequestMapping("/v1/theme-spu")
-public class ThemeSpuController {
+@RequestMapping("/v1/coupon")
+public class CouponController {
 
-    @Autowired
-    private ThemeSpuService themeSpuService;
-
-    @PostMapping
-    public CreatedVO create(@RequestParam @Positive Integer themeId,
-                            @RequestParam @Positive Integer spuId) {
-        themeSpuService.createThemeSpu(themeId,spuId);
+    @PostMapping("")
+    public CreatedVO create() {
         return new CreatedVO();
     }
 
@@ -51,12 +44,12 @@ public class ThemeSpuController {
     }
 
     @GetMapping("/{id}")
-    public ThemeSpuDO get(@PathVariable(value = "id") @Positive(message = "{id.positive}") Long id) {
+    public CouponDO get(@PathVariable(value = "id") @Positive(message = "{id.positive}") Long id) {
         return null;
     }
 
     @GetMapping("/page")
-    public PageResponseVO<ThemeSpuDO> page(
+    public PageResponseVO<CouponDO> page(
             @RequestParam(name = "count", required = false, defaultValue = "10")
             @Min(value = 1, message = "{page.count.min}")
             @Max(value = 30, message = "{page.count.max}") Long count,

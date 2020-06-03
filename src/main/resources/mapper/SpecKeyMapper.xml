@@ -13,10 +13,25 @@
         <result column="standard" property="standard" />
         <result column="description" property="description" />
     </resultMap>
+    
+    <resultMap id="DetailResultMap" autoMapping="true" type="io.github.talelin.latticy.model.SpecKeyDetailDO">
+        <id column="id" property="id" />
+        <collection property="valueList" ofType="io.github.talelin.latticy.model.SpecValueDO">
+            <id column="v_id" property="id" />
+            <result column="value" property="value"></result>
+            <result column="extend" property="extend"></result>
+        </collection>
+    </resultMap>
 
     <select id="getBySpuId" resultMap="BaseResultMap">
         SELECT ck.*
         FROM spec_key ck INNER JOIN spu_key uk ON ck.id=uk.spec_key_id
         WHERE uk.spu_id = #{id} AND ck.delete_time IS NULL
+    </select>
+
+    <select id="getDetail" resultMap="DetailResultMap">
+        SELECT sk.*,sv.id v_id,sv.value,sv.extend
+        FROM spec_key sk LEFT JOIN spec_value sv ON sv.spec_id=sk.id
+        WHERE sv.spec_id = #{id}
     </select>
 </mapper>

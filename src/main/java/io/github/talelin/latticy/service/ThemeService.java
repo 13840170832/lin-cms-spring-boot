@@ -28,7 +28,7 @@ public class ThemeService extends ServiceImpl<ThemeMapper,ThemeDO> {
     public ThemeDO getThemeById(Long id){
         ThemeDO theme = this.getById(id);
         if(null == theme){
-            throw new NotFoundException();
+            throw new NotFoundException(80000);
         }
         return theme;
     }

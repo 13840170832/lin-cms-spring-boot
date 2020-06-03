@@ -11,10 +11,10 @@ import lombok.experimental.Accessors;
  * @since 2020-06-01
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 @Accessors(chain = true)
 @TableName("theme_spu")
-public class ThemeSpuDO extends BaseModel {
+public class ThemeSpuDO{
 
 
     private Integer themeId;

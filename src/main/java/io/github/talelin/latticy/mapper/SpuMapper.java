@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import io.github.talelin.latticy.model.SpuDetailDO;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * <p>
  *  Mapper 接口
@@ -17,4 +19,6 @@ import org.springframework.stereotype.Repository;
 public interface SpuMapper extends BaseMapper<SpuDO> {
 
     SpuDetailDO getDetail(Long id);
+
+    List<SpuDO> getListForTheme(Long themeId);
 }

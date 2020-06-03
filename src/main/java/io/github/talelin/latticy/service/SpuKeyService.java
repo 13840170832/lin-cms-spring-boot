@@ -1,7 +1,10 @@
 package io.github.talelin.latticy.service;
 
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import io.github.talelin.latticy.mapper.SpuKeyMapper;
 import io.github.talelin.latticy.model.SpuKeyDO;
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.springframework.stereotype.Service;
 
 /**
  * <p>
@@ -11,6 +14,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @author generator@TaleLin
  * @since 2020-05-30
  */
-public interface SpuKeyService extends IService<SpuKeyDO> {
+@Service
+public class SpuKeyService extends ServiceImpl<SpuKeyMapper,SpuKeyDO> {
 
 }
